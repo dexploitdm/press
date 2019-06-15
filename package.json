@@ -1,7 +1,7 @@
 {
-  "name": "blog",
+  "name": "press",
   "version": "1.0.0",
-  "description": "First blog on nuxt,js",
+  "description": "press nuxt.js",
   "author": "Dexploitdm",
   "private": true,
   "scripts": {
