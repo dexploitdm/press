@@ -13,6 +13,7 @@
 <script>
 import AppAside from '~/components/admin/Aside'
 export default {
+    middleware: ['admin-auth'],
     components: {
         AppAside
     }
