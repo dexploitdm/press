@@ -28,7 +28,20 @@
             <div :key="controls.text">
                 <vue-markdown>{{controls.text}}</vue-markdown>
             </div>
-            </el-dialog>
+        </el-dialog>
+        <el-upload
+            class="mb"
+            drag
+            ref="upload"
+            action="https://jsonplaceholder.typicode.com/posts/"
+            :on-change="handleImageChange"
+            :auto-upload="false"
+            >
+            <i class="el-icon-upload"></i>
+            <div class="el-upload__text">Перетащите картинку <em>или нажмите</em></div>
+            <div class="el-upload__tip" slot="tip">Файлы с раширением jpg/png</div>
+        </el-upload>
+
         <el-form-item>
             <el-button 
                 type="primary" 
@@ -54,6 +67,7 @@ export default {
         return {
             loading: false,
             previewDialog: false,
+            image: null,
             controls: {
                 title: '',
                 text: '',
@@ -69,25 +83,32 @@ export default {
         }
     },
     methods: {
+        handleImageChange(file, fileList){
+            this.image = file.raw
+        },
         onSubmit() {
             this.$refs.form.validate(async valid => {
-                if (valid) {
+                if (valid && this.image) {
                     this.loading = true
 
                     const formData = {
                         text: this.controls.text,
-                        title: this.controls.title
+                        title: this.controls.title,
+                        image: this.image
                     }
                     try {         
                         await this.$store.dispatch('post/create', formData)
                         this.controls.title = ''
                         this.controls.text = ''
+                        this.$refs.upload.clearFiles()
                         this.$message.success('Пост добавлен')
                     } catch(e) {}  finally { 
                         this.loading = false
                     }
                  
-                } 
+                } else {
+                    this.$message.warning('Форма не валидна')
+                }
             });
         }
     }
